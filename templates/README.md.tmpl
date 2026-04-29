@@ -1,0 +1,25 @@
+# {{condition_name}} research
+
+{{project_framing}}
+
+**This is not a tracker.** See [CLAUDE.md](CLAUDE.md) for the operating contract that the AI assistant follows in this repo.
+
+## Layout
+
+- `intake/` — case context: journey, treatments, current state, constraints, diagnostics, open questions
+- `treatments/` — what's been tried, what's current, candidates under exploration (gated until frontier scan complete), ruled out
+- `causes/` — working hypotheses about etiology and refractoriness
+- `mechanisms/` — pathophysiology deep dives, written when relevant
+- `literature/` — paper notes, topic maps, saved searches, sources catalog
+- `data/raw/` — exported tracker data
+- `clinician/` — visit notes and pre-visit synthesis packets
+- `notes/` — working notes, brainstorms
+- `meta/` — operating definitions (standards), research methodology, frontier-scan gate, decisions log
+
+## Privacy notice
+
+This repository will accumulate personal health information. **Do not push it to a public remote** without an explicit redaction review. Even seemingly-innocuous notes can re-identify the patient by the combination of condition, region, and treatment history.
+
+## First session
+
+The first working session in this repo is the **frontier scan**. See `meta/frontier-scan-status.md` for the checklist. Treatment-candidate work is gated on its completion.

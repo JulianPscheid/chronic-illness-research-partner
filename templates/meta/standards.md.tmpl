@@ -1,0 +1,234 @@
+# Project standards
+
+Operational definitions used across the {{condition_name}} research project.
+When sessions disagree on what "adequate trial," "response," or any other
+load-bearing term means, this file is canonical. Universal sections
+(evidence tags, applicability axis, citation discipline, lead lifecycle,
+treatment-history adequacy categories) are filled in at scaffold time.
+Condition-specific sections are marked TODO and are filled during the
+frontier scan with PMID/DOI-cited content. Updates to this file are
+recorded via a decision-log entry in `meta/decisions.md`.
+
+Generated: {{generated_date}}
+
+## Evidence tags
+
+Every medical claim carries one of:
+
+| Tag | Meaning |
+|-----|---------|
+| `[RCT]`  | Randomized controlled trial |
+| `[META]` | Systematic review or meta-analysis of RCTs |
+| `[OBS]`  | Observational, cohort, case-control |
+| `[CASE]` | Case series or case report |
+| `[REV]`  | Narrative review |
+| `[CONS]` | Consensus statement / clinical guideline |
+| `[MECH]` | Mechanism / preclinical / human provocation (sub-tag below) |
+| `[SPEC]` | Speculation, AI-generated hypothesis, no primary citation |
+| `[UNVERIFIED]` | Citation that failed round-trip — quarantine; do not use in clinician-facing output |
+
+### Mechanism sub-tags
+
+- `[MECH-human]` — human provocation or biomarker study (strongest)
+- `[MECH-preclinical]` — animal / cell-line
+- `[MECH-review]` — narrative mechanism review
+- `[MECH-inference]` — extrapolation from related biology
+
+### Applicability axis
+
+When an evidence-tagged claim is intended to inform action on the
+{{condition_name}} case at the center of this project, append an
+applicability annotation:
+
+```
+[RCT; applicability: low — population excluded prior multi-class failure]
+[META; applicability: moderate — refractory subgroup pooled but small]
+```
+
+Levels: `high` / `moderate` / `low` / `unknown`. A high-quality RCT can
+be low-applicability if its population doesn't resemble the case at hand
+— e.g. trial enrollment criteria excluded the comorbidity profile, the
+prior-treatment-failure history, or the disease severity that defines
+this project. Note exclusions explicitly when they matter.
+
+### Citation verified ≠ claim verified
+
+Citation round-trip (PMID/DOI lookup) confirms a paper exists with the
+cited title and authors. It does **not** confirm the paper says what we
+cited it for. Stronger than `[SPEC]` requires a verbatim quote (or close
+paraphrase) anchored in `literature/papers/{PMID}.md`'s "Quote bank,"
+sourced from the abstract or fetched section.
+
+The subtle hallucination is **claim drift** — citing a real paper for a
+stronger / narrower / different claim than it actually makes. The
+quote-anchor protects against this; round-trip alone does not.
+
+The full round-trip protocol — when to fetch, what to record in the
+paper note, how to mark a failed verification, and how to handle
+disagreement between sources — lives in `meta/research-methodology.md`.
+That file is the operational companion to this one; the tag definitions
+here only have force when the round-trip discipline there is applied.
+
+## Lead lifecycle
+
+Every thread (cause hypothesis, treatment candidate, open question,
+diagnostic probe) eventually ends in one of:
+
+- **clinician-discussion candidate** — ready to bring to the specialist
+- **ruled out** — actively decided against, with rationale
+- **waiting on data** — needs tracker / clinical / lab data first
+- **waiting on lit verification** — needs paper round-trip
+- **watchlist** — keep monitoring; revisit if landscape changes
+- **dead end** — exhausted, no further action
+
+A thread in none of these states is open work-in-progress. That's fine
+when the project is small; revisit if active threads exceed ~5 and
+threads are getting lost.
+
+## Treatment-history adequacy categories
+
+Every entry in `treatments/tried.md` and `intake/treatments.md` should
+classify as exactly one of:
+
+- **adequate failure** — full duration + dose / intensity per the
+  benchmarks below, no response, no intolerable adverse event
+- **inadequate trial** — stopped before benchmark for any reason
+- **intolerable** — stopped due to adverse event before efficacy could
+  be judged
+- **partial response** — measurable improvement below responder
+  threshold, possibly worth retaining or combining
+- **tachyphylactic response** — clear initial response, durable loss
+- **confounded** — efficacy could not be judged due to concurrent
+  changes (other med start/stop, illness, life event, overuse pattern)
+- **unclear** — incomplete data, can't classify (record what's missing)
+- **never tried**
+
+This taxonomy is the input to the why-not-standard-ladder rule in
+`CLAUDE.md`: a treatment is candidate-worthy only if its prior history
+is `inadequate trial`, `intolerable`, `partial response`,
+`tachyphylactic response`, `unclear`, or `never tried` — or if there is
+some other rationale beyond efficacy in the broader population.
+
+## Phenotype / population definition
+
+<!-- TODO: fill during frontier scan -->
+
+Define the relevant {{condition_name}} phenotype(s) and the population
+the research project is built around. Specify subtype boundaries (e.g.,
+diagnostic-criteria-defined subtypes, severity bands, age cohort,
+comorbidity profile) and which subtype the patient at the center of
+this project actually fits. Cite the canonical diagnostic-criteria
+source and any consensus subtyping schemes via PMID/DOI, with a
+round-trip note in `literature/papers/{PMID}.md` per the protocol in
+`meta/research-methodology.md`. Phenotype matters because most
+applicability judgments downstream depend on whether the trial
+population resembles this one.
+
+## Response definitions
+
+<!-- TODO: fill during frontier scan -->
+
+What counts as responder, partial responder, non-responder, and
+tachyphylactic responder for {{condition_name}}? Specify the axis
+(frequency / severity / function / biomarker) and the threshold. Cite
+the source: at least one PMID/DOI per definition, with the round-trip
+note in `literature/papers/{PMID}.md` per the protocol in
+`meta/research-methodology.md`. Generic responder thresholds may not
+transfer between conditions; use the discipline-specific consensus
+where one exists, or the most rigorous published cohort definition
+where it does not.
+
+## Patient-important outcome measures and minimally important change (MID)
+
+<!-- TODO: fill during frontier scan -->
+
+List the outcome measures that matter for {{condition_name}} — both
+validated patient-reported instruments (with their MID values) and
+objective measures (with the smallest change considered clinically
+meaningful). Distinguish "trial-standard" outcomes from "what the
+patient actually cares about"; these often disagree. Cite each
+instrument's psychometric validation and its established MID via
+PMID/DOI, with the round-trip note in `literature/papers/{PMID}.md`
+per the protocol in `meta/research-methodology.md`. A change smaller
+than the MID is not a response, however statistically significant.
+
+## Adequate trial benchmarks
+
+<!-- TODO: fill during frontier scan -->
+
+| Intervention class                    | Min duration at target | Min target / dose / intensity | Source |
+| ------------------------------------- | ---------------------- | ----------------------------- | ------ |
+| (drug class A — e.g., SSRIs)          |                        |                               |        |
+| (drug class B — e.g., immunomod.)     |                        |                               |        |
+| (device — e.g., transcranial mag.)    |                        |                               |        |
+| (procedure — e.g., nerve block)       |                        |                               |        |
+| (physical therapy, structured)        |                        |                               |        |
+| (behavioral — e.g., CBT-I)            |                        |                               |        |
+| (dietary — e.g., low-FODMAP)          |                        |                               |        |
+| (supplement — e.g., riboflavin)       |                        |                               |        |
+
+A trial that ended before the row's benchmark is **inadequate**, not
+failed. Inadequate trials may warrant retry. Each row is cited via
+PMID/DOI in `literature/papers/{PMID}.md` per the protocol in
+`meta/research-methodology.md`; lift from condition-specific consensus
+statements where available, otherwise from the most rigorous cohort
+or trial protocol used for that intervention class in
+{{condition_name}}.
+
+## Severity / day-counting conventions
+
+<!-- TODO: fill during frontier scan -->
+
+Define how severity, episode boundaries, flares, and time-on-condition
+are counted for {{condition_name}}. State the unit (per-day, per-week,
+per-flare, per-episode), the boundary rules for events that span those
+units, and any severity scoring used. Cite the source convention via
+PMID/DOI with the round-trip note in `literature/papers/{PMID}.md`
+per the protocol in `meta/research-methodology.md`. Cross-period
+comparisons across the project's tracker data are only meaningful when
+the counting rule is fixed and explicit.
+
+## Comorbid-confound thresholds
+
+<!-- TODO: fill during frontier scan -->
+
+List comorbidities and exposures that confound efficacy judgments for
+{{condition_name}} interventions, and the threshold at which each
+becomes a "required field" on any treatment-evaluation entry. Examples
+of the categories to consider: overuse / dependency patterns, sleep
+disorders, depression / anxiety burden, autoimmune comorbidities,
+endocrine status, concurrent medication classes that interact. Cite
+the threshold source via PMID/DOI with the round-trip note in
+`literature/papers/{PMID}.md` per the protocol in
+`meta/research-methodology.md`. A confounder over threshold blocks
+"adequate failure" classification until the confound is addressed or
+explicitly bracketed.
+
+## Safety / contraindication / monitoring constraints
+
+<!-- TODO: fill during frontier scan -->
+
+Capture absolute contraindications, hard adverse-event stops, required
+monitoring labs/imaging, and access constraints (insurance, prior
+authorization, controlled-substance scheduling) that filter which
+candidates can actually be tried for {{condition_name}}. Each entry
+cites the safety source via PMID/DOI or labeled-product documentation,
+with the round-trip note in `literature/papers/{PMID}.md` per the
+protocol in `meta/research-methodology.md`. This section is what
+downstream candidate review checks against before a candidate enters
+`treatments/candidates/`.
+
+## Standard-of-care ladder / escalation map
+
+<!-- TODO: fill during frontier scan -->
+
+Map the conventional escalation pathway for {{condition_name}} — the
+stepwise sequence a typical specialist follows from first-line through
+multi-class refractory care, including the major guideline-endorsed
+branches. Cite the canonical guideline / consensus source for each tier
+via PMID/DOI, with the round-trip note in
+`literature/papers/{PMID}.md` per the protocol in
+`meta/research-methodology.md`. This ladder is what makes the
+why-not-standard-ladder rule in `CLAUDE.md` operational: a candidate
+must show why it is not just another rung the patient has already
+climbed.

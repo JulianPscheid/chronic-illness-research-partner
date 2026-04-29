@@ -1,0 +1,385 @@
+# Research methodology
+
+Operational discipline for any literature work done inside the
+{{condition_name}} research project. This file is the canonical
+research-methodology doc; `CLAUDE.md` and `meta/standards.md`
+cross-reference it, and the round-trip protocol below is what gives
+the evidence tags in `meta/standards.md` their force. When a session
+is unsure how to search, when to dig past an abstract, what to record
+in a paper note, or how to reconcile a citation that doesn't say what
+it was cited for, this file is the answer.
+
+Generated: {{generated_date}}
+
+## When to do research
+
+Open a literature pass when any of the following is true:
+
+- A treatment candidate is being evaluated and its rationale rests on
+  evidence that hasn't yet been round-tripped.
+- An evidence-tagged claim has been made (anything stronger than
+  `[SPEC]`) and the paper note in `literature/papers/{PMID}.md` does
+  not yet exist or does not yet contain a quote anchor for the claim.
+- The landscape has plausibly changed: a guideline update, a major
+  trial readout, a new safety signal, a class-level mechanism revision.
+  Re-pull the relevant topic map under `literature/topics/` and audit
+  what's now stale.
+- A clinician question being prepared in `clinician/pre-visit/` needs
+  literature support — the goal of those documents is to bring a
+  specialist citations they can engage with quickly, not vibes.
+- A working hypothesis under `causes/` has accumulated enough mass
+  that it should be falsified or strengthened against current
+  literature rather than left as `[SPEC]`.
+
+If none of those triggers apply, don't open a research pass. Idle
+literature scanning eats time and tends to produce paraphrase rather
+than evidence.
+
+## Search strategies
+
+Use heterogeneous searches across complementary sources. Don't
+paraphrase the same query four times.
+
+| Source | Use for | Notes |
+|--------|---------|-------|
+| **PubMed via NCBI E-utilities** | Primary biomedical literature; deterministic PMID retrieval | Use `esearch.fcgi` to get PMIDs for a query, `efetch.fcgi` to pull abstracts. Stable for scripted use. |
+| **Semantic Scholar** | Citation graph, related-work expansion, papers PubMed indexes late | Useful for chasing what a key paper has been cited by, and for surfacing preprints. |
+| **Cochrane Library** | High-quality systematic reviews when one exists | Often the right starting point for a class-level efficacy question; if a Cochrane review covers the question, anchor on it before primary trials. |
+| **ClinicalTrials.gov** | Active and completed trials, including unpublished | Surface trials that finished but haven't published — non-publication is a bias signal worth naming. |
+| **Discipline-specific society guidelines / consensus statements** | Standard-of-care anchors and the reasoning behind the ladder | Replace this row at scaffold time with the relevant body for {{condition_name}} (e.g., the specialty society publishing the canonical care guideline). Consensus statements get `[CONS]`; treat them as expert summary, not as primary evidence. |
+
+Heterogeneity rules:
+
+- Generate at least three queries that differ in **type**, not just in
+  wording: a literal/entity query (drug INN, mechanism term, exact
+  outcome name), a broader-context query (the underlying biology or
+  population), and a source-targeted query (society site, registry,
+  specific journal).
+- After the first round, mine the strongest hits for terms-of-art you
+  didn't know to search for: official drug or target names, acronyms,
+  cohort names, key authors. Use those to sharpen the next round.
+  This is retrieval-guided reformulation: the literature tells you
+  what to ask better than your guess does.
+- When event timing is unclear (a trial readout, a guideline update),
+  search neutrally ("latest", "update") rather than assuming an
+  outcome exists.
+- When two sources disagree, surface the disagreement in the paper
+  notes and the topic map — do not average it away.
+
+### Saved-search protocol
+
+Every non-trivial search is recorded under
+`literature/searches/YYYY-MM-DD-topic.md` so the next session can see
+what was already tried. Format spec is in the **Saved-search protocol**
+section below.
+
+## Deep-mode triggers
+
+Default is to read the abstract. Dig past the abstract — pull the
+methods, the trial registration, the supplementary tables — when:
+
+- The paper is an RCT in a population that plausibly resembles the
+  case at the center of this project (refractory cohort, multi-class
+  prior failure, the specific comorbidity profile, the relevant
+  severity band). Most pivotal RCTs exclude exactly this population;
+  whether they did is a methods-section fact, not an abstract fact.
+- The paper is a mechanism paper being cited as the basis of a
+  treatment candidate. The abstract often overstates what the data
+  show; the figures and the discussion-section caveats often don't
+  make it into the abstract at all.
+- The paper is a consensus statement or guideline that drives the
+  standard ladder. The full document specifies the strength of each
+  recommendation, the dissenting opinions, and the evidence grade —
+  none of which appears in the summary.
+- The paper is older than 5 years but is still being cited as a
+  landmark. Old landmarks are exactly where claim drift accumulates;
+  re-read the original methods rather than trusting the chain of
+  citations downstream.
+- The paper is the primary citation for a numeric claim (effect size,
+  CI, NNT, responder rate). Numbers in abstracts are often pooled,
+  rounded, or restricted to a per-protocol subset; the methods or the
+  results table is the source of truth.
+
+If a deep-mode read changes what the cited paper supports, update
+the relevant `literature/papers/{PMID}.md` quote bank immediately and
+audit any downstream candidate or cause file that depended on the
+old reading.
+
+## Source curation
+
+Three tiers, applied at the source level before any single paper is
+read:
+
+**Trust at face value, but still record the citation.**
+- Peer-reviewed RCTs and meta-analyses in indexed journals.
+- Cochrane systematic reviews.
+- Consensus statements and clinical guidelines from major specialty
+  societies (tag `[CONS]`).
+- FDA / EMA / equivalent regulator labeling and safety communications,
+  for the labeled indication, dose, and contraindication facts.
+
+**Require round-trip before any clinician-facing use.**
+- Anything cited as the source of a specific number, mechanism, or
+  refractory-population outcome.
+- Anything where claim drift is likely (older landmark; review article
+  that summarizes a primary trial; secondary citation in a guideline
+  that quotes a number from a different paper).
+- Preprints (bioRxiv, medRxiv, SSRN). Useful for current awareness;
+  not adequate evidence on their own. Tag the underlying claim as
+  whatever the methods would warrant if peer-reviewed (`[OBS]`,
+  `[RCT]`, etc.) and add an explicit `preprint — not peer-reviewed`
+  note in the paper-note applicability annotation.
+
+**Background only — do not cite as primary evidence.**
+- Narrative reviews and editorials. Tag `[REV]`. Use them to find
+  the primary citations they reference, then go read those.
+- Commercial / patient-facing drug pages.
+- Conference abstracts without a corresponding paper. Treat as a
+  pointer to follow up on, not as evidence.
+- Wikipedia and aggregator sites. Useful only as a starting map.
+
+A citation tier mismatch — citing a `[REV]` source as if it were a
+trial result, citing a preprint as if it were peer-reviewed, citing
+a society guideline as if it were a primary mechanism paper — is one
+of the anti-patterns listed below.
+
+## PMID/DOI round-trip protocol
+
+The round-trip is what turns "I read about a paper" into evidence the
+project can carry forward. Run it before any claim stronger than
+`[SPEC]` is committed to a candidate file, a cause file, or a
+clinician-facing document.
+
+Steps:
+
+1. **Resolve the identifier.** PMID for PubMed-indexed work, DOI for
+   anything else. If only a citation string is in hand, search PubMed
+   first (E-utilities `esearch.fcgi` against the title) and capture
+   the PMID.
+2. **Fetch the abstract.** Use NCBI E-utilities:
+
+   ```
+   https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id={PMID}&rettype=abstract&retmode=text
+   ```
+
+   For DOI-only work, fetch from the publisher or the DOI resolver.
+   Save the verbatim abstract; do not paraphrase at this stage.
+3. **Compare metadata against the cited form.** Check title, full
+   author list (not just first author), journal, year, and volume /
+   pages. A mismatch on any of these is a red flag — the citation
+   may have been confabulated or transposed from a different paper.
+4. **Write or update the paper note** at
+   `literature/papers/{PMID}.md` using the format in the next
+   section. The verbatim abstract goes into the note; the quote bank
+   captures the verbatim sentences that anchor each downstream claim.
+5. **Reconcile against the claim that triggered the round-trip.**
+   - If the abstract / fetched section directly supports the claim,
+     copy the supporting sentence(s) verbatim into the paper note's
+     quote bank, keyed to the downstream file that uses the claim.
+   - If the abstract is silent on the specific claim, decide whether
+     to dig into the methods / results section (deep-mode trigger
+     applies) or to weaken the claim to `[SPEC]` until the deeper
+     read happens.
+   - If the paper does **not** say what was cited — claim drift —
+     tag the downstream claim `[UNVERIFIED]` immediately. Do not
+     use `[UNVERIFIED]` claims in clinician-facing output. Resolve
+     the drift by either finding the correct primary source, weakening
+     the claim, or removing it. Record the reconciliation in
+     `meta/decisions.md` so the same drift doesn't re-emerge.
+6. **Annotate applicability.** Per `meta/standards.md`, append the
+   applicability axis (`high` / `moderate` / `low` / `unknown`) to
+   the evidence tag with a one-clause reason — typically the trial's
+   exclusion criteria versus the case at hand.
+
+The vocabulary above (`[UNVERIFIED]`, claim drift, quote anchor,
+applicability axis) is defined in `meta/standards.md`. Use the same
+words; don't introduce parallel terminology.
+
+## Quote bank format
+
+Each `literature/papers/{PMID}.md` is one paper, one note. Use this
+shape:
+
+```markdown
+# {PMID} — {Short paper handle}
+
+## Citation
+{Authors}. {Title}. {Journal}. {Year};{Volume}({Issue}):{Pages}.
+PMID: {PMID}. DOI: {DOI if available}.
+
+## Evidence tag
+[RCT] — phase 3, double-blind, placebo-controlled, n={N}.
+Applicability: moderate — {one-clause reason re: this project's case}.
+
+## Round-trip status
+Fetched: {YYYY-MM-DD} via NCBI E-utilities efetch.
+Title / authors / journal / year confirmed against citation as used.
+Round-trip by: {session date or session id}.
+
+## Abstract (verbatim)
+{Paste the abstract verbatim. Do not paraphrase here. If structured
+abstract, keep the section headers (Background / Methods / Results /
+Conclusions) intact.}
+
+## Quote bank
+
+### Claim used in: treatments/candidates/T-NNN-{name}.md
+> "{Verbatim sentence from the abstract or fetched section that
+> directly supports the claim being made downstream.}"
+Source location: Abstract, Results paragraph 2.
+Supports: "{The downstream claim, restated tersely.}"
+
+### Claim used in: causes/C-NNN-{name}.md
+> "{Verbatim sentence.}"
+Source location: Discussion, paragraph 4.
+Supports: "{The downstream claim.}"
+
+## Caveats / what this paper does not say
+- {Population the trial excluded that matters for this project's case.}
+- {Outcome the trial did not measure that downstream readers might assume it did.}
+- {Open methodological question — e.g., open-label extension, post-hoc subgroup, industry sponsorship.}
+
+## Related papers
+- `literature/papers/{other PMID}.md` — {one-clause relation}
+- Topic map: `literature/topics/{slug}.md`
+```
+
+The discipline that matters: every claim cited from this paper has a
+verbatim sentence in the quote bank that supports it. If a downstream
+claim cannot be anchored to a verbatim sentence, weaken it to
+`[SPEC]` or remove it. This is the operational guard against claim
+drift named in `meta/standards.md`.
+
+## Topic maps
+
+`literature/topics/{slug}.md` collects the papers relevant to one
+treatment class, mechanism, or working hypothesis, with the relations
+between them made explicit. The point of a topic map is to expose
+where the evidence is thin, where it disagrees with itself, and which
+papers are doing real load-bearing work for the project's downstream
+claims.
+
+Suggested shape:
+
+```markdown
+# Topic: {topic name}
+
+## Scope
+{One paragraph: what's in, what's out, why this topic exists as a
+separate map.}
+
+## Anchor papers
+- `literature/papers/{PMID}.md` — {role: pivotal RCT / mechanism /
+  guideline / refractory cohort / etc.}
+- `literature/papers/{PMID}.md` — {role}
+
+## Open questions / disagreements
+- {Question or contested claim.} Source A says X
+  ({PMID/path}); Source B says Y ({PMID/path}).
+- {Question.} Not yet round-tripped — see saved search
+  `literature/searches/{file}.md`.
+
+## Downstream uses in this project
+- `treatments/candidates/T-NNN-{name}.md` depends on {anchor paper}.
+- `causes/C-NNN-{name}.md` depends on {anchor paper}.
+- `meta/standards.md` adequate-trial benchmark for {class} cites
+  {anchor paper}.
+
+## Updates
+- {YYYY-MM-DD}: {what changed, who updated, why}.
+```
+
+A topic map is updated whenever a new paper enters the topic, whenever
+a downstream file starts depending on a paper in the topic, or
+whenever a previously-anchored paper fails round-trip.
+
+## Saved-search protocol
+
+Every literature search worth re-running is recorded so the next
+session sees what's already been tried. Path:
+`literature/searches/YYYY-MM-DD-{slug}.md`. Slug is short and
+topic-shaped, not a sentence.
+
+Shape:
+
+```markdown
+# Search: {topic} ({YYYY-MM-DD})
+
+## Question
+{What this search was trying to answer, in one sentence.}
+
+## Source(s)
+- PubMed (E-utilities)
+- Semantic Scholar
+- Cochrane
+- {others}
+
+## Queries
+1. `{exact query string 1}` — {source} — {N hits}
+2. `{exact query string 2}` — {source} — {N hits}
+3. `{exact query string 3}` — {source} — {N hits}
+
+## Filters applied
+- Date range: {e.g., 2018-present}
+- Population: {e.g., adult, refractory subset}
+- Study type: {e.g., RCT, systematic review}
+
+## Kept (round-tripped or queued for round-trip)
+- PMID {N} — `literature/papers/{PMID}.md` — {one-clause why}
+- PMID {N} — queued for round-trip — {one-clause why}
+
+## Discarded with reason
+- PMID {N} — wrong population (cohort excluded {X})
+- PMID {N} — preprint, superseded by published version PMID {M}
+- PMID {N} — duplicate of {paper already in topic map}
+
+## Followups
+- {Open thread the search exposed: a related search to run, a topic
+  map to update, an anchor paper to round-trip.}
+```
+
+The discipline isn't about the format. It's that the next session can
+look at the searches folder and see, in five minutes, what's already
+been asked and what hasn't.
+
+## Anti-patterns
+
+Each of these is a way the project's evidence floor silently rots.
+Don't do them; if a previous session did, fix the artifacts they
+produced.
+
+- **Citing without round-trip.** Asserting a paper says X without
+  fetching the abstract and anchoring a verbatim sentence in
+  `literature/papers/{PMID}.md`. Round-trip is the protocol; without
+  it, the claim is `[SPEC]` regardless of how confident the prose
+  sounds.
+- **Treating `[SPEC]` as if it were `[RCT]`.** Speculation written
+  with the cadence of an evidence claim is the most damaging form of
+  claim drift, because the tag is the only thing distinguishing the
+  two. Tag honestly; let the prose follow the tag, not the other way
+  around.
+- **Citing review articles as primary evidence.** A `[REV]` source
+  summarizes other people's data; it is not data itself. Use reviews
+  to find the primary citations they reference, then read and round-
+  trip those. A claim's evidence tag is whatever the underlying
+  primary source supports, not whatever the review article called it.
+- **Lifting numbers from the abstract without checking the methods.**
+  Effect sizes, response rates, NNTs, and CIs in abstracts are often
+  pooled, rounded, restricted to per-protocol subsets, or framed
+  around the primary endpoint when the relevant outcome was
+  secondary. A numeric claim warrants a deep-mode read of methods and
+  results — see **Deep-mode triggers** above.
+- **Averaging away source disagreement.** When two sources disagree
+  on direction or magnitude of effect, say so in the paper notes and
+  the topic map. Do not collapse the disagreement into a softer
+  middle claim; the disagreement is itself information.
+- **Letting `[UNVERIFIED]` claims linger.** A claim tagged
+  `[UNVERIFIED]` is quarantined per `meta/standards.md` and must be
+  resolved (correct primary source found, claim weakened, or claim
+  removed). Don't leave the tag in place across sessions as a
+  permanent caveat.
+
+See `meta/standards.md` for the full evidence-tag definitions, the
+applicability axis, the lead-lifecycle terminology, and the
+treatment-history adequacy categories that the round-trip protocol
+above feeds into.

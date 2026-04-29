@@ -1,0 +1,30 @@
+---
+status: incomplete
+completed_at: null
+---
+
+# Frontier-scan status
+
+This file gates `treatments/candidates/` work for the {{condition_name}} project. The Claude instance must read this file before creating any candidate file. While `status: incomplete`, candidate work is refused.
+
+## Required to mark complete
+
+- [ ] Phenotype / population definition filled in `meta/standards.md`
+- [ ] Response definitions filled in `meta/standards.md`
+- [ ] Outcome measures and MID filled in `meta/standards.md`
+- [ ] Adequate-trial benchmarks filled in `meta/standards.md`
+- [ ] Severity / day-counting conventions filled in `meta/standards.md`
+- [ ] Comorbid-confound thresholds filled in `meta/standards.md`
+- [ ] Safety / monitoring constraints filled in `meta/standards.md`
+- [ ] Standard-of-care ladder filled in `meta/standards.md`
+- [ ] At least 5 landmark papers in `literature/landmark-papers.md` (each round-tripped, with paper-note files in `literature/papers/`)
+
+## How to mark complete
+
+When every box is checked AND each filled section cites at least one PMID/DOI that has been round-tripped (paper note exists with quote bank), update this file: change `status:` to `complete` and set `completed_at:` to today's date in YYYY-MM-DD format.
+
+The Claude instance must verify the round-trip evidence before agreeing the scan is complete. Specifically: for each filled section in `meta/standards.md`, the cited PMID/DOI must have a corresponding `literature/papers/{PMID}.md` file, and that file's quote bank must contain a verbatim sentence supporting the cited claim. If verification fails for any section, the scan is not complete.
+
+## Why this gate exists
+
+The why-not-standard-ladder rule (CLAUDE.md item 7) cannot be applied without knowing the standard ladder. Operational definitions (response, adequate trial) cannot be applied without thresholds. Generating treatment candidates before this baseline is set produces noise, not signal.

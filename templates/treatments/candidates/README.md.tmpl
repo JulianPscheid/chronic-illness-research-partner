@@ -1,0 +1,13 @@
+# Treatment candidates — gated directory
+
+**Stop.** Before creating any file in this directory, read `meta/frontier-scan-status.md`.
+
+If that file's frontmatter says `status: incomplete`, candidate work is refused. The frontier scan must be completed first — that is what populates `meta/standards.md` with operational definitions for {{condition_name}} and seeds `literature/landmark-papers.md` with verified anchor citations.
+
+A candidate file in this directory must explicitly answer the why-not-standard-ladder question (see `CLAUDE.md` candidate discipline section). That question cannot be answered without the standard ladder defined in `meta/standards.md`.
+
+## Once the gate is open
+
+- One file per candidate. Naming: `T-NNN-name.md` (zero-padded sequence, slug name).
+- Each candidate file must include: rationale, evidence tag with applicability annotation, the why-not-standard-ladder answer, anticipated trial design (duration, dose/intensity, response criteria), safety considerations, and at least one round-tripped PMID/DOI.
+- New candidates start in `treatments/candidates/`. As they progress, they may move to `treatments/ruled-out.md` (with rationale), to a clinician-discussion summary in `clinician/pre-visit/`, or remain on the watchlist.

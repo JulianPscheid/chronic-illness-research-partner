@@ -1,0 +1,30 @@
+# Sources catalog
+
+Curated sources for {{condition_name}} literature. Each entry has a purpose tag indicating how it should be used.
+
+## Primary literature
+
+- **PubMed** (NCBI) — primary index for biomedical literature. Search via the web UI at `https://pubmed.ncbi.nlm.nih.gov/`; round-trip via E-utilities (`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi`). Source-of-truth for round-trip protocol per `meta/research-methodology.md`.
+- **Semantic Scholar** — citation graph, useful for finding related and citing papers, and for older work that PubMed indexes patchily.
+- **Cochrane Library** — systematic reviews and meta-analyses. Strongest evidence tier for treatment-effect questions.
+- **ClinicalTrials.gov** — registered trials, including in-progress and unpublished. Useful for spotting publication bias.
+
+## Guidelines and consensus
+
+<!-- TODO: list condition-specific guidelines and consensus statements during the frontier scan. -->
+
+## Society publications
+
+<!-- TODO: list condition-specific specialty society journals and white papers during the frontier scan. -->
+
+## Patient and clinician communities
+
+<!-- TODO: list relevant communities (peer-reviewed-quality forums, registries, advocacy groups with research arms) during the frontier scan, with notes on signal-to-noise. -->
+
+## When to use which
+
+- Round-trip a citation: PubMed E-utilities. Always.
+- Find papers citing a known landmark: Semantic Scholar.
+- Look for systematic reviews on a treatment question: Cochrane first, then PubMed with `[Publication Type]` filter for systematic-review.
+- Check whether a candidate is in trials: ClinicalTrials.gov.
+- Background on standard-of-care: society guidelines + consensus statements (filled during frontier scan).

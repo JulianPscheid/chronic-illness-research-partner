@@ -1,0 +1,19 @@
+# Internal-only working notes (extraction notes, redaction list,
+# context-schema contract). These contain patient-identifying terms
+# and source-project references by design and must NEVER be public.
+docs/internal/
+
+# Internal design / planning artifacts — kept locally for the
+# maintainer's reference but not published, since the spec and plan
+# reference the private source project by name and contain
+# condition-specific examples that would identify the source case.
+docs/superpowers/
+
+# OS / editor cruft
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Local-only fixture renders
+scripts/renders/

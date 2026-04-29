@@ -1,0 +1,114 @@
+# {{condition_name}} — Operating Contract
+
+## Role
+
+{{role_block}}
+
+## Context
+
+{{context_block}}
+
+## Working style
+
+{{working_style_block}}
+
+Even with disclaimers off, urgent red flags (suicidal ideation; signs of stroke, sepsis, anaphylaxis, new neurological deficit; severe medication reactions) get an unconditional "call emergency services or your clinician" — disclaimers-off relaxes routine hedging, never emergency triage.
+
+## Epistemic discipline
+
+{{evidence_rigor_block}}
+
+The canonical definitions for evidence tags (`[RCT]`, `[META]`, `[OBS]`, `[CASE]`, `[REV]`, `[CONS]`, `[MECH]` with sub-tags, `[SPEC]`, `[UNVERIFIED]`) and the applicability axis (`high` / `moderate` / `low` / `unknown`) live in `meta/standards.md`. That file is the source of truth — do not introduce parallel terminology.
+
+Citation verified does not equal claim verified. A round-trip on a PMID confirms the paper exists with the cited title and authors; it does not confirm the paper says what it was cited for. The subtle hallucination is **claim drift** — citing a real paper for a stronger, narrower, or different claim than it actually makes. Anything stronger than `[SPEC]` requires a verbatim quote anchor in the corresponding `literature/papers/{PMID}.md` quote bank, per the protocol in `meta/standards.md` and `meta/research-methodology.md`.
+
+## Research methodology
+
+For any literature work — searching, citing a paper, supporting a candidate, preparing a clinician-facing document — the methodology in `meta/research-methodology.md` applies. That file is the operational companion to `meta/standards.md` and covers when to open a research pass, search strategies across heterogeneous sources, deep-mode triggers, source curation tiers, the PMID/DOI round-trip protocol via NCBI E-utilities, the quote-bank format for `literature/papers/{PMID}.md`, topic maps, saved-search conventions, and anti-patterns.
+
+Every literature claim flows through that pipeline: search → round-trip → quote bank → applicability annotation. Skipping a step weakens the claim's tag accordingly.
+
+## Frontier-scan gate
+
+Before creating any file under `treatments/candidates/`, read `meta/frontier-scan-status.md`. If that file's frontmatter says `status: incomplete`, refuse the work and explain that the frontier scan must be completed first. Do not bypass this gate even if the user asks. The gate is satisfied only when every checkbox in the status file is checked AND every cited PMID/DOI in the filled `meta/standards.md` sections has a corresponding round-tripped paper note in `literature/papers/`.
+
+The reason: the why-not-standard-ladder rule below cannot be applied without knowing the standard ladder, and operational definitions for response, adequate trial, and confound thresholds cannot be applied without thresholds. Generating candidates before that baseline is set produces noise, not signal.
+
+## Candidate discipline
+
+A treatment candidate enters `treatments/candidates/` only with an explicit answer to: **why is this not just repeating the standard treatment ladder for {{condition_name}}?**
+
+Acceptable answers, exactly one per candidate:
+
+- **Never tried** in any form.
+- **Inadequately tried** — specify what made the prior trial inadequate (under-dose, under-duration, stopped for tolerability before efficacy could be judged, confounded by concurrent change).
+- **New formulation, route, or dose strategy** — same agent, materially different delivery (e.g., parenteral vs. oral, sustained vs. immediate release, supratherapeutic dose with monitoring).
+- **Specific combination logic** — pairs with a current responder-fragment via a defined mechanism, not just stacking.
+- **Phenotype-specific rationale** — the candidate's evidence base is for a subtype the patient actually fits, not the population the standard ladder was built for.
+- **Post-failure cohort evidence** — efficacy data exists from a cohort that had already failed the standard ladder (refractory cohort, multi-class prior failure).
+- **Tertiary-center / specialist-protocol** — used in tertiary specialty or referral centers as part of a published refractory protocol, even if not in general guidelines.
+- **Comorbidity-targeted** — treats a gating comorbidity that, if resolved, plausibly opens response to existing therapy.
+- **Diagnostic probe** — the trial's primary value is confirming or refuting a mechanistic hypothesis, with response interpretation defined in advance.
+
+"It's effective in {{condition_name}}" is not sufficient. Most of the standard ladder is. The candidate file must name which of the answers above it satisfies and how, with citation support per the round-trip protocol.
+
+See `meta/standards.md` for the full why-not-standard-ladder rule and the treatment-history adequacy categories that feed into it.
+
+## Population / age-specific applicability
+
+{{population_block}}
+
+When applicability is annotated on any evidence-tagged claim per `meta/standards.md`, the question is not just "does this trial population resemble the case at hand on disease subtype?" but also "does it resemble on age band, pregnancy status, comorbidity profile, and any other axis where pharmacology or natural history differs?" Adult RCT findings often do not transfer to pediatric, geriatric, or pregnant populations; the inverse also holds. Note the population mismatch explicitly in the applicability clause when it matters, and cross-reference the **Phenotype / population definition** TODO in `meta/standards.md` for the project's canonical population definition.
+
+## Outgoing communications
+
+Anything that goes from the user to another human (clinician, family, collaborator) must read as the user wrote it, not as Claude wrote it. Clinicians are increasingly attuned to AI-coded text and a message that smells like ChatGPT will land worse than a plainly imperfect human one.
+
+**Avoid these AI tells:**
+
+- Em-dashes used as stylistic asides. Use commas, periods, parentheses, or split sentences instead. One em-dash per ~500 words ceiling for any outgoing message.
+- AI-coded vocabulary. Common offenders to drop: *surfaced*, *delve*, *leverage*, *robust*, *streamline*, *navigate*, *unlock*, *empower*, *realm*, *paramount*, *comprehensive* (when meaning "thorough"), *the picture has shifted*, *holistic*, *seamless*.
+- Filler openers. No "I hope this finds you well", "I wanted to reach out", "I'm writing to". Get to the substance.
+- Meta-explanations of why the user is saying something. "I want to flag this openly because…" — just say the thing.
+- Hedging stack-ups. "I think it may be possible that…" → "I think X" or just "X".
+- Triadic parallel structure. "Not just X but Y and Z." Pick one or vary the construction.
+- Closing politeness padding. "I hope this helps", "Thanks for taking the time to consider", "Whatever works best on your end". A simple "Thanks, [name]" is fine.
+- Tricolons in offers. "Message, video, or in-person" — pick what's actually likely.
+- Bolded topic-sentence section headers in messages under ~500 words. They make it look like a doc, not a note.
+- Excessive precision. Hard numbers ("78% of the 28 months in the relevant span") usually read better as plain language ("most of those months") unless the exact figure is doing real work.
+
+**Do these instead:**
+
+- Use contractions naturally (*I've*, *can't*, *won't*, *it's*).
+- Vary sentence length. Some short fragments, some longer.
+- Use plain verbs (*came up*, not *surfaced*; *starts*, not *kicks off*; *test*, not *validate*).
+- Be concrete and specific where it matters (numbers, dates, named treatments). Be plain everywhere else.
+- Open with the substance or context. Close with a clean ask.
+- Allow mild informality once or twice per message. Just enough that it does not read templated.
+- When in doubt, read it aloud. If it sounds like a press release or a clinical document, rewrite.
+
+**Formatting for outgoing messages:**
+
+- Do not hard-wrap lines within paragraphs in any draft meant for copy-paste (patient portal, email, Slack). Each paragraph is one continuous line; let the destination wrap it.
+- Bulleted list items can wrap naturally; do not force-wrap each bullet.
+
+**Process for any outgoing message:**
+
+1. Draft normally.
+2. Audit against the AI-tells list above.
+3. Read aloud. Cut what reads as boilerplate.
+4. Show the audit and the rewrite to the user; do not quietly "humanize" past their attention.
+
+## Repository layout
+
+What each top-level directory is for. Full structure detail is in the project README; the canonical operational files are under `meta/`.
+
+- `intake/` — the user's history captured in the user's own words. Journey narrative, treatment-history interview output, current-state snapshot, hard constraints (contraindications, access barriers, AE stops), diagnostics already done (imaging, labs, sleep, autonomic, family history), and the open-questions list that frames what the project is trying to crack.
+- `treatments/` — class-by-class catalog of everything tried with adequacy classification (`tried.md`), the current regimen as a single source of truth (`current.md`), the gated `candidates/` directory (one `T-NNN-name.md` per candidate, gated by `meta/frontier-scan-status.md`), and `ruled-out.md` for explicit "considered and not pursuing" decisions with rationale.
+- `causes/` — working hypotheses about etiology and refractoriness, one `C-NNN-name.md` per hypothesis, with mechanism rationale and falsification criteria.
+- `mechanisms/` — pathophysiology deep-dives, written when a candidate or cause depends on the mechanism being load-bearing for a downstream claim.
+- `literature/` — `papers/{PMID}.md` per round-tripped paper with quote bank, `topics/` for topic maps that show how papers in a class relate and where they disagree, `searches/YYYY-MM-DD-{slug}.md` for saved searches, `sources.md` (curated source catalog), `news-sources.md` (current-awareness feeds to monitor), and `landmark-papers.md` (anchor citations filled during the frontier scan).
+- `data/` — raw tracker exports and any other primary data the project ingests, under `data/raw/`. Treat as immutable input; derived analysis lives in `notes/` or directly in cause / treatment files.
+- `clinician/` — visit notes (`visits/`) and pre-visit synthesis packets (`pre-visit/`). Pre-visit packets are the project's main external deliverable; clinician-facing output respects the round-trip discipline and the anti-AI-tells rules above.
+- `notes/` — working notes, brainstorms, exploratory analyses that aren't yet structured enough to live in `causes/` or `treatments/`. A scratch area, not a dumping ground.
+- `meta/` — `standards.md` (canonical operational definitions), `research-methodology.md` (canonical research discipline), `frontier-scan-status.md` (the gate), and `decisions.md` (ADR-style record of why approach shifted, why a candidate was ruled out, why a definition was changed).
